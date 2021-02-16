@@ -20,7 +20,7 @@ public class ExpenseTrackerApplication {
 		filterRegistrationBean.setFilter(authFilter);
 
 		// Protect below Url from unauthorized access.
-		filterRegistrationBean.addUrlPatterns("api/categories/*");
+		filterRegistrationBean.addUrlPatterns("/api/categories/*");
 		return filterRegistrationBean;
 	}
 }

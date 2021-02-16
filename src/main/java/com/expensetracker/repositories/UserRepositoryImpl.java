@@ -36,7 +36,7 @@ public class UserRepositoryImpl implements UserRepository {
     });
 
     @Override
-    public String create(String firstName, String lastName, String email, String password) throws AuthException {
+    public Integer create(String firstName, String lastName, String email, String password) throws AuthException {
         String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(07));
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -49,7 +49,7 @@ public class UserRepositoryImpl implements UserRepository {
                 return ps;
             }, keyHolder);
 
-            return (String) keyHolder.getKeys().get("USER_ID");
+            return (Integer) keyHolder.getKeys().get("USER_ID");
         } catch (Exception ex) {
             throw new AuthException("Failed to create user.");
         }
@@ -74,7 +74,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findById(String userId) throws AuthException {
+    public User findById(Integer userId) throws AuthException {
         return jdbcTemplate.queryForObject(SQL_FIND_USER_BY_ID, new  Object[]{userId}, userRowMapper);
     }
 }

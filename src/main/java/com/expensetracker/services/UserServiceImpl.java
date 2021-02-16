@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
             throw new AuthException("Email already registered.");
         }
 
-        String userId = userRepository.create(firstName, lastName, email, password);
+        Integer userId = userRepository.create(firstName, lastName, email, password);
         return userRepository.findById(userId);
     }
 }

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/categories")
 public class CategoryResource {
 
-    @GetMapping("")
+    @GetMapping
     public String getAllCategories(HttpServletRequest httpServletRequest) {
         int userId = (Integer) httpServletRequest.getAttribute("userId");
         return "User Id" + userId;

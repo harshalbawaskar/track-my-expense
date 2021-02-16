@@ -3,7 +3,6 @@ package com.expensetracker.resources;
 import com.expensetracker.Constants;
 import com.expensetracker.domain.User;
 import com.expensetracker.services.UserService;
-import com.sun.org.apache.xml.internal.security.algorithms.implementations.SignatureBaseRSA;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
