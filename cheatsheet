@@ -1,0 +1,17 @@
+1. To spin up the postgress image in docker
+
+docker container run --name postgresdb -e POSTGRES_PASSWORD=admin -d -p 5432:5432 postgres
+
+2. To copy the sql queries file to postgres container
+*cd into directory of file to be copied
+
+docker cp expense_tracker_db.sql postgresdb:/
+
+3. Goto container
+
+docker container exec -it postgresdb
+
+4. Run the SQL file in container
+
+psql -U postgres --file expense_tracker_db.sql
+
