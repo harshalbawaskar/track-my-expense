@@ -21,6 +21,11 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     private static final String SQL_FIND_BY_CATEGORY_ID = "SELECT C.CATEGORY_ID, C.USER_ID, C.TITLE, C.DESCRIPTION, COALESCE(SUM(T.AMOUNT), 0) TOTAL_EXPENSE " +
             "FROM CATEGORIES_TBL C LEFT OUTER JOIN TRANSACTIONS_TBL T ON C.CATEGORY_ID = T.CATEGORY_ID " +
             "WHERE C.USER_ID = ? AND C.CATEGORY_ID = ? GROUP BY C.CATEGORY_ID";
+    private static final String SQL_FIND_ALL_CATEGORIES = "SELECT C.CATEGORY_ID, C.USER_ID, C.TITLE, C.DESCRIPTION, COALESCE(SUM(T.AMOUNT), 0) TOTAL_EXPENSE " +
+            "FROM CATEGORIES_TBL C LEFT OUTER JOIN TRANSACTIONS_TBL T ON C.CATEGORY_ID = T.CATEGORY_ID " +
+            "WHERE C.USER_ID = ? GROUP BY C.CATEGORY_ID";
+    private static final String SQL_UPDATE_CATEGORY = "UPDATE CATEGORIES_TBL SET TITLE = ?, DESCRIPTION = ? WHERE " +
+            "USER_ID = ? AND CATEGORY_ID = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -55,12 +60,16 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
     @Override
     public void updateCategory(Integer userId, Integer categoryId, Category category) throws BadRequestException {
-
+        try {
+            jdbcTemplate.update(SQL_UPDATE_CATEGORY, new Object[]{category.getTitle(), category.getDescription(), userId, categoryId});
+        } catch (Exception ex) {
+            throw new BadRequestException("Invalid request");
+        }
     }
 
     @Override
     public List<Category> findAllCategories(Integer userId) throws ResourceNotFoundException {
-        return null;
+        return jdbcTemplate.query(SQL_FIND_ALL_CATEGORIES, new Object[]{userId}, categoryRowMapper);
     }
 
     @Override

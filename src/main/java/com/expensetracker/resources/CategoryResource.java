@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,9 +20,10 @@ public class CategoryResource {
     CategoryService categoryService;
 
     @GetMapping
-    public String getAllCategories(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<List<Category>> getAllCategories(HttpServletRequest httpServletRequest) {
         int userId = (Integer) httpServletRequest.getAttribute("userId");
-        return "User Id" + userId;
+        List<Category> categoryList = categoryService.fetchAllCategories(userId);
+        return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
 
     @PostMapping
@@ -32,5 +35,24 @@ public class CategoryResource {
         Category category = categoryService.addCategory(userId, title, description);
 
         return new ResponseEntity<>(category, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<Category> getCategoryById(HttpServletRequest httpServletRequest, @PathVariable("categoryId") Integer categoryId) {
+        int userId = (Integer) httpServletRequest.getAttribute("userId");
+        Category category = categoryService.fetchCategoryById(userId, categoryId);
+        return new ResponseEntity<>(category, HttpStatus.OK);
+    }
+
+    @PutMapping("/{categoryId}")
+    public ResponseEntity<Map<String, String>> updateCategory(HttpServletRequest httpServletRequest,
+                                                              @PathVariable("categoryId") Integer categoryId,
+                                                              @RequestBody Category category) {
+        Integer userId = (Integer) httpServletRequest.getAttribute("userId");
+        categoryService.updateCategory(userId, categoryId, category);
+
+        Map<String, String> updatedResponse = new HashMap<>();
+        updatedResponse.put("message", "Category updated success!");
+        return new ResponseEntity<>(updatedResponse, HttpStatus.OK);
     }
 }

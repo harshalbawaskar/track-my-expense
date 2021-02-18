@@ -18,13 +18,13 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
 
     @Override
-    public List<Category> fetchAllCategories(Integer userId, Integer categoryId) {
-        return null;
+    public List<Category> fetchAllCategories(Integer userId) {
+        return categoryRepository.findAllCategories(userId);
     }
 
     @Override
-    public Category fetchCategoryById(Integer categoryId) throws ResourceNotFoundException {
-        return null;
+    public Category fetchCategoryById(Integer userId, Integer categoryId) throws ResourceNotFoundException {
+        return categoryRepository.findById(userId, categoryId);
     }
 
     @Override
@@ -34,8 +34,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void updateCategory(Integer userId, Integer CategoryId, String title, String description) throws BadRequestException {
-
+    public void updateCategory(Integer userId, Integer categoryId, Category category) throws BadRequestException {
+        categoryRepository.updateCategory(userId, categoryId,category);
     }
 
     @Override
