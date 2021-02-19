@@ -39,7 +39,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void removeCategoryWithAllTransactions(Integer userId, Integer CategoryId) throws ResourceNotFoundException {
-
+    public void removeCategoryWithAllTransactions(Integer userId, Integer categoryId) throws ResourceNotFoundException {
+        fetchCategoryById(userId, categoryId);
+        categoryRepository.removeCategoryById(userId, categoryId);
     }
 }

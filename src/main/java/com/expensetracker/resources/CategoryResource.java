@@ -55,4 +55,15 @@ public class CategoryResource {
         updatedResponse.put("message", "Category updated success!");
         return new ResponseEntity<>(updatedResponse, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<Map<String, String>> removeCategory(HttpServletRequest httpServletRequest,
+                                                              @PathVariable("categoryId") Integer categoryId) {
+        Integer userId = (Integer) httpServletRequest.getAttribute("userId");
+        categoryService.removeCategoryWithAllTransactions(userId, categoryId);
+
+        Map<String, String> updatedResponse = new HashMap<>();
+        updatedResponse.put("message", "Category deleted success!");
+        return new ResponseEntity<>(updatedResponse, HttpStatus.OK);
+    }
 }

@@ -15,5 +15,5 @@ public interface CategoryRepository {
 
     Category findById(Integer userId, Integer categoryId) throws ResourceNotFoundException;
 
-    void removeCategoryById(Integer userId, Integer categoryId);
+    void removeCategoryById(Integer userId, Integer categoryId) throws ResourceNotFoundException;
 }

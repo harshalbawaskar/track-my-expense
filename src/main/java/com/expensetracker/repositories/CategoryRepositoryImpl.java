@@ -26,6 +26,8 @@ public class CategoryRepositoryImpl implements CategoryRepository {
             "WHERE C.USER_ID = ? GROUP BY C.CATEGORY_ID";
     private static final String SQL_UPDATE_CATEGORY = "UPDATE CATEGORIES_TBL SET TITLE = ?, DESCRIPTION = ? WHERE " +
             "USER_ID = ? AND CATEGORY_ID = ?";
+    private static final String SQL_DELETE_CATEGORY = "DELETE FROM CATEGORIES_TBL WHERE USER_ID = ? AND CATEGORY_ID = ?";
+    private static final String SQL_DELETE_CATEGORY_TRANSACTION = "DELETE FROM TRANSACTIONS_TBL WHERE CATEGORY_ID = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -81,8 +83,16 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         }
     }
 
-    @Override
-    public void removeCategoryById(Integer userId, Integer categoryId) {
+    public void removeAllCategoryTransactions(Integer userId, Integer categoryId) throws ResourceNotFoundException {
+        jdbcTemplate.update(SQL_DELETE_CATEGORY_TRANSACTION, new Object[]{categoryId});
+    }
 
+    @Override
+    public void removeCategoryById(Integer userId, Integer categoryId) throws ResourceNotFoundException {
+        removeAllCategoryTransactions(userId, categoryId);
+        Integer deleteRowCount = jdbcTemplate.update(SQL_DELETE_CATEGORY, new Object[]{userId, categoryId});
+        if (deleteRowCount == 0) {
+            throw new ResourceNotFoundException("Category does not exist in records!");
+        }
     }
 }
